@@ -78,13 +78,13 @@ class calc(QtWidgets.QWidget):
         self.btn_degree.clicked.connect(self.degree)
 
     def plus(self):
-        self.num = int(self.value)
+        self.num = float(self.value)
         self.operator = '+'
         self.value = self.value + '+'
-        self.answer.setText('{}'.format(self.value))
+        self.answer.setText('{}'.format(str(self.value).rstrip('.0')))
 
     def minus(self):
-        self.num = int(self.value)
+        self.num = float(self.value)
         self.operator = '-'
         self.value = self.value + '-'
         self.answer.setText('{}'.format(self.value))
@@ -96,40 +96,51 @@ class calc(QtWidgets.QWidget):
         self.answer.setText('{}'.format(self.value))
 
     def multiply(self):
-        self.num = int(self.value)
+        self.num = float(self.value)
         self.operator = '*'
         self.value = self.value + '*'
         self.answer.setText('{}'.format(self.value))
 
     def divide(self):
-        self.num = int(self.value)
+        self.num = float(self.value)
         self.operator = '/'
         self.value = self.value + '/'
         self.answer.setText('{}'.format(self.value))
 
     def percent(self):
-        self.num = int(self.value)
+        self.num = float(self.value)
         self.operator = '%'
         self.value = self.value + '%'
         self.answer.setText('{}'.format(self.value))
 
     def degree(self):
-        self.num = int(self.value)
+        self.num = float(self.value)
         self.operator = '^'
         self.value = self.value + '^'
         self.answer.setText('{}'.format(self.value))
 
-    def sign(self):'''
-        self.num = int(self.val)
-        self.operator = '+'
-        self.val = self.val + '+'
-        self.answer.setText('{}'.format(self.val))'''
+    def sign(self):
+        self.num = float(self.value)
+        new_sign = self.num * (-1)
+        self.value = new_sign
+        self.answer.setText('{}'.format(str(new_sign).rstrip('.0')))
 
     def dot(self):
-        self.num = float(self.value)
         self.value = self.value + '.'
         self.answer.setText('{}'.format(self.value))
-        print(self.value)
+
+    # def sender(self):
+    #    pass
+
+    '''def add_digit(self):
+        btn = self.sender()
+        digit_buttons = ('btn_0', 'btn_1', 'btn_2', 'btn_3', 'btn_4',
+                         'btn_5', 'btn_6', 'btn_7', 'btn_8', 'btn_9')
+        if btn.objectName() in digit_buttons:
+            if self.answer.text() == '0':
+                self.answer.setText(btn.text())
+            else:
+                self.answer.setText(self.answer.text() + btn.text())'''
 
     def one(self):
         self.value = self.value + '1'
@@ -184,35 +195,41 @@ class calc(QtWidgets.QWidget):
     def equals(self):
         value_2 = self.value
         if self.operator == '+':
-            x = int((value_2.split('+')[1]))
-            y = self.num + x
-            self.answer.setText('{}'.format(y))
-            self.value = str(y)
+            x = float((value_2.split('+')[1]))
+            y = float(self.num) + x
+            self.answer.setText('{}'.format(str(y).rstrip('.0')))
+            self.value = str(y).rstrip('.0')
         elif self.operator == '-':
-            x = int((value_2.split('-')[1]))
-            y = self.num - x
-            self.answer.setText('{}'.format(y))
-            self.value = str(y)
+            x = float((value_2.split('-')[1]))
+            y = float(self.num) - x
+            self.answer.setText('{}'.format(str(y).rstrip('.0')))
+            self.value = str(y).rstrip('.0')
         elif self.operator == '*':
-            x = int((value_2.split('*')[1]))
-            y = self.num * x
-            self.answer.setText('{}'.format(y))
-            self.value = str(y)
+            x = float((value_2.split('*')[1]))
+            y = float(self.num) * x
+            self.answer.setText('{}'.format(str(y).rstrip('.0')))
+            self.value = str(y).rstrip('.0')
         elif self.operator == '^':
-            x = int((value_2.split('^')[1]))
-            y = self.num ** x
-            self.answer.setText('{}'.format(y))
-            self.value = str(y)
+            x = float((value_2.split('^')[1]))
+            y = float(self.num) ** x
+            self.answer.setText('{}'.format(str(y).rstrip('.0')))
+            self.value = str(y).rstrip('.0')
         elif self.operator == '/':
             try:
-                x = int((value_2.split('/')[1]))
-                y = self.num / x
-                self.answer.setText('{}'.format(y))
-                self.value = str(y)
+                x = float((value_2.split('/')[1]))
+                y = float(self.num) / x
+                self.answer.setText('{}'.format(str(y).rstrip('.0')))
+                self.value = str(y).rstrip('.0')
             except ZeroDivisionError:
                 self.answer.setText('Division by 0 not allowed!')
                 self.num = ''
                 self.value = ''
+        '''elif self.operator == '%':
+            x = float((value_2.split('-' or '+')[1]))
+            # y = float(self.num) * x
+            # self.answer.setText('{}'.format(y))
+            # self.value = str(y)
+            print('x', x, 'type', type(x))'''
 
 
 if __name__ == "__main__":
