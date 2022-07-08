@@ -1,240 +1,119 @@
 from PyQt6 import QtWidgets
 import sys
+from design import Ui_MainWindow
+from operator import add, sub, mul, truediv, pow
+
+operation = {
+    '+': add,
+    '-': sub,
+    '*': mul,
+    '/': truediv,
+    '^': pow
+}
 
 
-class calc(QtWidgets.QWidget):
+class calc(QtWidgets.QMainWindow, Ui_MainWindow):
     def __init__(self):
         super(calc, self).__init__()
-        self.setWindowTitle('calculator')
-        self.my_layout = QtWidgets.QGridLayout()
-        self.setLayout(self.my_layout)
-        self.value = ''
-        self.operator = ''
-        self.num = 0
+        self.ui = Ui_MainWindow()
+        self.ui.setupUi(self)
 
-        self.btn_0 = QtWidgets.QPushButton('0')
-        self.btn_1 = QtWidgets.QPushButton('1')
-        self.btn_2 = QtWidgets.QPushButton('2')
-        self.btn_3 = QtWidgets.QPushButton('3')
-        self.btn_4 = QtWidgets.QPushButton('4')
-        self.btn_5 = QtWidgets.QPushButton('5')
-        self.btn_6 = QtWidgets.QPushButton('6')
-        self.btn_7 = QtWidgets.QPushButton('7')
-        self.btn_8 = QtWidgets.QPushButton('8')
-        self.btn_9 = QtWidgets.QPushButton('9')
-        self.btn_plus = QtWidgets.QPushButton('+')
-        self.btn_minus = QtWidgets.QPushButton('-')
-        self.btn_clean = QtWidgets.QPushButton('CE')
-        self.btn_multiply = QtWidgets.QPushButton('*')
-        self.btn_divide = QtWidgets.QPushButton('/')
-        self.btn_percent = QtWidgets.QPushButton('%')
-        self.btn_equals = QtWidgets.QPushButton('=')
-        self.btn_dot = QtWidgets.QPushButton('.')
-        self.btn_sign = QtWidgets.QPushButton('+/-')
-        self.btn_degree = QtWidgets.QPushButton('^')
-        self.answer = QtWidgets.QLabel('')
+        self.ui.btn_1.clicked.connect(self.add_digit)
+        self.ui.btn_2.clicked.connect(self.add_digit)
+        self.ui.btn_3.clicked.connect(self.add_digit)
+        self.ui.btn_4.clicked.connect(self.add_digit)
+        self.ui.btn_5.clicked.connect(self.add_digit)
+        self.ui.btn_6.clicked.connect(self.add_digit)
+        self.ui.btn_7.clicked.connect(self.add_digit)
+        self.ui.btn_8.clicked.connect(self.add_digit)
+        self.ui.btn_9.clicked.connect(self.add_digit)
+        self.ui.btn_0.clicked.connect(self.add_digit)
 
-        self.my_layout.addWidget(self.answer, 0, 0, 1, 4)
-        self.my_layout.addWidget(self.btn_0, 5, 1)
-        self.my_layout.addWidget(self.btn_1, 4, 0)
-        self.my_layout.addWidget(self.btn_2, 4, 1)
-        self.my_layout.addWidget(self.btn_3, 4, 2)
-        self.my_layout.addWidget(self.btn_4, 3, 0)
-        self.my_layout.addWidget(self.btn_5, 3, 1)
-        self.my_layout.addWidget(self.btn_6, 3, 2)
-        self.my_layout.addWidget(self.btn_7, 2, 0)
-        self.my_layout.addWidget(self.btn_8, 2, 1)
-        self.my_layout.addWidget(self.btn_9, 2, 2)
-        self.my_layout.addWidget(self.btn_plus, 1, 3)
-        self.my_layout.addWidget(self.btn_minus, 2, 3)
-        self.my_layout.addWidget(self.btn_clean, 1, 2)
-        self.my_layout.addWidget(self.btn_multiply, 3, 3)
-        self.my_layout.addWidget(self.btn_divide, 4, 3)
-        self.my_layout.addWidget(self.btn_percent, 1, 1)
-        self.my_layout.addWidget(self.btn_equals, 5, 3)
-        self.my_layout.addWidget(self.btn_dot, 5, 0)
-        self.my_layout.addWidget(self.btn_sign, 5, 2)
-        self.my_layout.addWidget(self.btn_degree, 1, 0)
+        self.ui.btn_clear.clicked.connect(self.clean_all)
+        self.ui.btn_del_one_element.clicked.connect(self.clean_label)
 
-        self.btn_1.clicked.connect(self.one)
-        self.btn_2.clicked.connect(self.two)
-        self.btn_3.clicked.connect(self.three)
-        self.btn_4.clicked.connect(self.four)
-        self.btn_5.clicked.connect(self.five)
-        self.btn_6.clicked.connect(self.six)
-        self.btn_7.clicked.connect(self.seven)
-        self.btn_8.clicked.connect(self.eight)
-        self.btn_9.clicked.connect(self.nine)
-        self.btn_0.clicked.connect(self.zero)
-        self.btn_plus.clicked.connect(self.plus)
-        self.btn_minus.clicked.connect(self.minus)
-        self.btn_clean.clicked.connect(self.clean)
-        self.btn_multiply.clicked.connect(self.multiply)
-        self.btn_divide.clicked.connect(self.divide)
-        self.btn_percent.clicked.connect(self.percent)
-        self.btn_equals.clicked.connect(self.equals)
-        self.btn_dot.clicked.connect(self.dot)
-        self.btn_sign.clicked.connect(self.sign)
-        self.btn_degree.clicked.connect(self.degree)
+        self.ui.btn_dot.clicked.connect(self.dot)
 
-    def plus(self):
-        self.num = float(self.value)
-        self.operator = '+'
-        self.value = self.value + '+'
-        self.answer.setText('{}'.format(str(self.value).rstrip('.0')))
+        self.ui.btn_plus.clicked.connect(self.add_mem)
 
-    def minus(self):
-        self.num = float(self.value)
-        self.operator = '-'
-        self.value = self.value + '-'
-        self.answer.setText('{}'.format(self.value))
+        self.ui.btn_plus.clicked.connect(self.math_operations)
+        self.ui.btn_minus.clicked.connect(self.math_operations)
+        self.ui.btn_multiply.clicked.connect(self.math_operations)
+        self.ui.btn_divide.clicked.connect(self.math_operations)
+        self.ui.btn_degree.clicked.connect(self.math_operations)
 
-    def clean(self):
-        self.num = 0
-        self.operator = ''
-        self.value = ''
-        self.answer.setText('{}'.format(self.value))
-
-    def multiply(self):
-        self.num = float(self.value)
-        self.operator = '*'
-        self.value = self.value + '*'
-        self.answer.setText('{}'.format(self.value))
-
-    def divide(self):
-        self.num = float(self.value)
-        self.operator = '/'
-        self.value = self.value + '/'
-        self.answer.setText('{}'.format(self.value))
-
-    def percent(self):
-        self.num = float(self.value)
-        self.operator = '%'
-        self.value = self.value + '%'
-        self.answer.setText('{}'.format(self.value))
-
-    def degree(self):
-        self.num = float(self.value)
-        self.operator = '^'
-        self.value = self.value + '^'
-        self.answer.setText('{}'.format(self.value))
-
-    def sign(self):
-        self.num = float(self.value)
-        new_sign = self.num * (-1)
-        self.value = new_sign
-        self.answer.setText('{}'.format(str(new_sign).rstrip('.0')))
-
-    def dot(self):
-        self.value = self.value + '.'
-        self.answer.setText('{}'.format(self.value))
-
-    # def sender(self):
-    #    pass
-
-    '''def add_digit(self):
+    def add_digit(self):
         btn = self.sender()
         digit_buttons = ('btn_0', 'btn_1', 'btn_2', 'btn_3', 'btn_4',
                          'btn_5', 'btn_6', 'btn_7', 'btn_8', 'btn_9')
         if btn.objectName() in digit_buttons:
-            if self.answer.text() == '0':
-                self.answer.setText(btn.text())
+            if self.ui.lineEdit.text() == '0':
+                self.ui.lineEdit.setText(btn.text())
             else:
-                self.answer.setText(self.answer.text() + btn.text())'''
+                self.ui.lineEdit.setText(self.ui.lineEdit.text() + btn.text())
 
-    def one(self):
-        self.value = self.value + '1'
-        self.answer.setText('{}'.format(self.value))
-        print(self.value)
+    def clean_all(self):
+        self.ui.lineEdit.setText('0')
+        self.ui.label.clear()
 
-    def two(self):
-        self.value = self.value + '2'
-        self.answer.setText('{}'.format(self.value))
-        print(self.value)
+    def clean_label(self):
+        self.ui.lineEdit.setText('0')
 
-    def three(self):
-        self.value = self.value + '3'
-        self.answer.setText('{}'.format(self.value))
-        print(self.value)
+    def dot(self):
+        if '.' not in self.ui.lineEdit.text():
+            self.ui.lineEdit.setText(self.ui.lineEdit.text() + '.')
 
-    def four(self):
-        self.value = self.value + '4'
-        self.answer.setText('{}'.format(self.value))
-        print(self.value)
+    def add_mem(self):
+        btn = self.sender()
+        entry = self.del_zero(self.ui.lineEdit.text())
+        if not self.ui.label.text():
+            self.ui.label.setText(entry + f'{btn.text()}')
+            self.ui.lineEdit.setText('0')
 
-    def five(self):
-        self.value = self.value + '5'
-        self.answer.setText('{}'.format(self.value))
-        print(self.value)
+    @staticmethod
+    def del_zero(num):
+        n = str(float(num))
+        return n[:-2] if n[-2:] == '.0' else n
 
-    def six(self):
-        self.value = self.value + '6'
-        self.answer.setText('{}'.format(self.value))
-        print(self.value)
+    def get_num_lineedit(self):
+        entry = self.ui.lineEdit.text().strip('.')
+        return float(entry) if '.' in entry else int(entry)
 
-    def seven(self):
-        self.value = self.value + '7'
-        self.answer.setText('{}'.format(self.value))
-        print(self.value)
+    def get_num_label(self):
+        if self.ui.label.text():
+            temp = self.ui.label.text().strip('.').split()[0]
+            return float(temp) if '.' in temp else int(temp)
 
-    def eight(self):
-        self.value = self.value + '8'
-        self.answer.setText('{}'.format(self.value))
-        print(self.value)
+    def get_sign(self):
+        if self.ui.lineEdit.text():
+            return self.ui.label.text().strip('.').split()[-1]
 
-    def nine(self):
-        self.value = self.value + '9'
-        self.answer.setText('{}'.format(self.value))
-        print(self.value)
+    def calculate(self):
+        entry = self.ui.lineEdit.text()
+        temp = self.ui.label.text()
+        if temp:
+            result = self.del_zero(str(
+                operation[self.get_sign()](self.get_num_lineedit(), self.get_num_label())))
+            self.ui.lineEdit.setText(temp + self.del_zero(entry) + '=')
+            self.ui.lineEdit.setText(result)
+            return result
 
-    def zero(self):
-        self.value = self.value + '0'
-        self.answer.setText('{}'.format(self.value))
-        print(self.value)
+    def math_operations(self):
+        temp = self.ui.label.text()
+        btn = self.sender()
+        if not temp:
+            self.add_mem()
+        else:
+            if self.get_sign() != btn.text():
+                if self.get_sign() == '=':
+                    self.add_mem()
+                else:
+                    self.ui.label.setText(temp[:-2] + f'{btn.text()}')
 
-    def equals(self):
-        value_2 = self.value
-        if self.operator == '+':
-            x = float((value_2.split('+')[1]))
-            y = float(self.num) + x
-            self.answer.setText('{}'.format(str(y).rstrip('.0')))
-            self.value = str(y).rstrip('.0')
-        elif self.operator == '-':
-            x = float((value_2.split('-')[1]))
-            y = float(self.num) - x
-            self.answer.setText('{}'.format(str(y).rstrip('.0')))
-            self.value = str(y).rstrip('.0')
-        elif self.operator == '*':
-            x = float((value_2.split('*')[1]))
-            y = float(self.num) * x
-            self.answer.setText('{}'.format(str(y).rstrip('.0')))
-            self.value = str(y).rstrip('.0')
-        elif self.operator == '^':
-            x = float((value_2.split('^')[1]))
-            y = float(self.num) ** x
-            self.answer.setText('{}'.format(str(y).rstrip('.0')))
-            self.value = str(y).rstrip('.0')
-        elif self.operator == '/':
-            try:
-                x = float((value_2.split('/')[1]))
-                y = float(self.num) / x
-                self.answer.setText('{}'.format(str(y).rstrip('.0')))
-                self.value = str(y).rstrip('.0')
-            except ZeroDivisionError:
-                self.answer.setText('Division by 0 not allowed!')
-                self.num = ''
-                self.value = ''
-        '''elif self.operator == '%':
-            x = float((value_2.split('-' or '+')[1]))
-            # y = float(self.num) * x
-            # self.answer.setText('{}'.format(y))
-            # self.value = str(y)
-            print('x', x, 'type', type(x))'''
 
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
-    app.setStyle('Fusion')
     window = calc()
     window.show()
     sys.exit(app.exec())
